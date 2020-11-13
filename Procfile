@@ -1,1 +1,1 @@
-web: julia --project src/LoREcoSimulation.jl $PORT
+web: julia --project src/LoREcoSimulation.jl
