@@ -1,1 +1,1 @@
-web: julia --project genie.jl
+web: julia --project src/LoREcoSimulation.jl
