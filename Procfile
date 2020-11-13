@@ -1,1 +1,1 @@
-web: julia --project src/LoREcoSimulation.jl
+web: julia --project src/LoREcoSimulation.jl 80
