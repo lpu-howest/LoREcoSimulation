@@ -1,5 +1,5 @@
 using Genie.Router
-using SchellingController
+using AbmController
 
 route("/") do
   serve_static_file("welcome.html")
@@ -12,5 +12,4 @@ end
 
 route("/hello", hello_world)
 
-route("/abm", SchellingController.abm_run)
-route("/bgbooks", SchellingController.billgatesbooks)
+route("/abm", AbmController.abm_run)
