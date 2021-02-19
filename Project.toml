@@ -1,5 +1,6 @@
 [deps]
 Agents = "46ada45e-f475-11e8-01d0-f70cc89e6671"
+DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 Genie = "c43c736e-a2d1-11e8-161f-af95117fbd1e"
 LoggingExtras = "e6f89c97-d47a-5376-807f-9c37f3926c36"
 MbedTLS = "739be429-bea8-5141-9913-cc70e7f3736d"
