@@ -1,17 +1,13 @@
 <h1>ABM</h1>
 <table>
   <tr>
-    <th>id</th>
-   <th>Position</th>
-   <th>Mood</th>
-   <th>Group</th>
+
+   <th>Balans</th>
+
  </tr>
  <% @foreach(agents) do agent %>
  <tr>
-    <td>$(agent.types)</td>
     <td>$(agent.balance)</td>
-    <td>$(agent.posessions)</td>
-    <td>$(agent.stock)</td>
   </tr>
 
 <% end %>

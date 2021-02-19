@@ -184,7 +184,7 @@ function make_loreco(model, actor, needs = nothing)
 end
 
 function loreco_run_table()
-    adata = [:types, :balance, :posessions, :stock]
+    adata = [(:balance, sumsy_balance)]
     model = init_loreco_model()
     data, _ = run!(model, actor_step!, econo_model_step!, 5; adata)
     #print(data[1:10, :])
