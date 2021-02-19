@@ -14,3 +14,7 @@ route("/hello", hello_world)
 
 route("/abm", SchellingController.abm_run)
 route("/bgbooks", SchellingController.billgatesbooks)
+route("/abmhtml", SchellingController.abm_run_html)
+route("/abmtable", SchellingController.abm_run_table)
+route("/abmgraph", SchellingController.abm_run_graph)
+route("/abmscatter", SchellingController.abm_run_scatter)

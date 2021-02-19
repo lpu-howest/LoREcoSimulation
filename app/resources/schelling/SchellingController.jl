@@ -1,7 +1,8 @@
 module SchellingController
 using Agents, Plots
 using Genie.Renderer.Html
-
+using Tables
+using PrettyTables
 #=@agent SchellingAgent{Int} GridAgent{2} begin
     mood::Bool
     group::Int
@@ -68,10 +69,59 @@ data[1:10, :] # print only a few rows
 =#
 # added
 function abm_run()
-    adata = [(:mood, sum)]
+    adata = [:pos, :mood, :group]
+
     model = initialize()
     data, _ = run!(model, agent_step!, 5; adata)
-    data
+    data[1:10, :]
+end
+
+function abm_run_html()
+    adata = [:pos, :mood, :group]
+    model = initialize()
+    data, _ = run!(model, agent_step!, 5; adata)
+    #print(data[1:10, :])
+    #pretty_table(data, formatters = ft_printf("%.3f", [2,3]), highlighters = (hl_lt(0.2), hl_gt(0.8)))
+    #pretty_table(data[1:10, :], backend = :html, formatters = ft_printf("%.3f", [2,3]))
+
+    html(:schelling, :abm,  agents = Tables.namedtupleiterator(data))
+end
+
+function abm_run_table()
+    adata = [:pos, :mood, :group]
+    model = initialize()
+    data, _ = run!(model, agent_step!, 5; adata)
+    #print(data[1:10, :])
+    #pretty_table(data, formatters = ft_printf("%.3f", [2,3]), highlighters = (hl_lt(0.2), hl_gt(0.8)))
+    #pretty_table(data[1:10, :], backend = :html, formatters = ft_printf("%.3f", [2,3]))
+
+    html(:schelling, :table,  agents = Tables.namedtupleiterator(data))
+end
+function abm_run_graph()
+    adata = [:pos, :mood, :group]
+    model = initialize()
+    data, _ = run!(model, agent_step!, 5; adata)
+    #print(data[1:10, :])
+    #pretty_table(data, formatters = ft_printf("%.3f", [2,3]), highlighters = (hl_lt(0.2), hl_gt(0.8)))
+    #pretty_table(data[1:10, :], backend = :html, formatters = ft_printf("%.3f", [2,3]))
+
+    html(:schelling, :graph,  agents = Tables.namedtupleiterator(data))
+end
+function abm_run_scatter()
+    adata = [:pos, :mood, :group]
+    model = initialize()
+    data, _ = run!(model, agent_step!, 5; adata)
+    #print(data[1:10, :])
+    #pretty_table(data, formatters = ft_printf("%.3f", [2,3]), highlighters = (hl_lt(0.2), hl_gt(0.8)))
+    #pretty_table(data[1:10, :], backend = :html, formatters = ft_printf("%.3f", [2,3]))
+
+    html(:schelling, :scatter,  agents = Tables.namedtupleiterator(data))
+end
+mutable struct Row
+    id::String # The identifier number of the agent
+    pos::String # The x, y location of the agent on a 2D grid
+    mood::String # whether the agent is happy in its position. (true = happy)
+    group::String # The group of the agent,  determines mood as it interacts with neighbors
 end
 
 struct Book

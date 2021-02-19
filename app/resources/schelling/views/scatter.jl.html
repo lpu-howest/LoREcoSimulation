@@ -1,0 +1,30 @@
+<h1>ABM</h1>
+<canvas id="myChart" width="400" height="400"></canvas>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+
+        datasets: [{
+            label: 'Scatter dataset'',
+            data: [
+             <% @foreach(agents) do agent %>
+             {
+             x: $(agent.x),
+             y: $(agent.y)
+           },
+             <% end %>
+           ]
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom'
+            }]
+        }
+    }
+});
+</script>
