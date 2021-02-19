@@ -3,6 +3,7 @@ using Agents, Plots
 using Genie.Renderer.Html
 using Tables
 using PrettyTables
+using EconoSim
 
 # Default properties
 SUMSY = :sumsy
@@ -182,7 +183,7 @@ function make_loreco(model, actor, needs = nothing)
     return isnothing(needs) ? actor : make_marginal(actor, needs)
 end
 
-function loreco_run_table()Ge
+function loreco_run_table()
     adata = [:types, :balance, :posessions, :stock]
     model = init_loreco_model()
     data, _ = run!(model, econo_step!, econo_model_step!, 200; adata)
@@ -190,6 +191,6 @@ function loreco_run_table()Ge
     #pretty_table(data, formatters = ft_printf("%.3f", [2,3]), highlighters = (hl_lt(0.2), hl_gt(0.8)))
     #pretty_table(data[1:10, :], backend = :html, formatters = ft_printf("%.3f", [2,3]))
 
-    html(:schelling, :table,  agents = Tables.namedtupleiterator(data))
+    html(:abm, :table,  agents = Tables.namedtupleiterator(data))
 end
 end
