@@ -183,8 +183,14 @@ function make_loreco(model, actor, needs = nothing)
     return isnothing(needs) ? actor : make_marginal(actor, needs)
 end
 
+balance(a::Actor) = sumsy_balance(a.balance)
+
 function loreco_run_table()
+<<<<<<< HEAD
     adata = [:types, :balance, :posessions, :stock]
+=======
+    adata = [:types, balance, :posessions, :stock]
+>>>>>>> ca68e9df931bc7eb3717db789cd368350d1b24b1
     model = init_loreco_model()
     data, _ = run!(model, actor_step!, econo_model_step!, 5; adata)
     #print(data[1:10, :])
