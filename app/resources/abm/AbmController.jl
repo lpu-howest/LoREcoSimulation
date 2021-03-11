@@ -184,7 +184,7 @@ function make_loreco(model, actor, needs = nothing)
 end
 
 function loreco_run_table()
-    adata = [(:balance, sumsy_balance)]
+    adata = [:types, :balance, :posessions, :stock]
     model = init_loreco_model()
     data, _ = run!(model, actor_step!, econo_model_step!, 5; adata)
     #print(data[1:10, :])
@@ -192,5 +192,10 @@ function loreco_run_table()
     #pretty_table(data[1:10, :], backend = :html, formatters = ft_printf("%.3f", [2,3]))
 
     html(:abm, :table,  agents = Tables.namedtupleiterator(data))
+end
+function loreco_dashboard()
+
+    #html(:abm, :dashboard,  layout = :dashboardlayout)
+    html(:abm, :dashboard, layout = :dashboardlayout)
 end
 end
