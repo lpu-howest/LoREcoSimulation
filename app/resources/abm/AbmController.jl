@@ -16,9 +16,6 @@ BAKER = :baker
 TV_MERCHANT = :tv_merchant
 GOVERNANCE = :governance
 
-# Common good balance entry
-COMMON_GOOD = BalanceEntry("Common good")
-
 # Consumables
 container_ticket = ConsumableBlueprint("Container park ticket")
 swim_ticket = ConsumableBlueprint("Swim ticket")
@@ -33,13 +30,10 @@ function init_loreco_model(sumsy::SuMSy = SuMSy(2000, 25000, 0.1, 30, seed = 500
                         bakers::Integer = 15,
                         tv_merchants::Integer = 5,
                         common_good_recipients::Integer = 5)
-    # Create a SuMSy model.
+    # Create a standard SuMSy model.
     model = create_sumsy_model(sumsy,
                                 fixed_contribution,
-                                sumsy.demurrage_free,
-                                contribution_percentage)
-
-    model.properties[COMMON_GOOD_RECIPIENTS] = common_good_recipients
+                                contribution_tiers = contribution_percentage)
 
     # Add actors.
     add_consumers(model, consumers)
@@ -54,7 +48,7 @@ end
     Distribute the collected contributions.
 """
 function distribute_contributions!(model, governance::Actor)
-    contributions = sumsy_balance(model.contribution_balance)
+    contributions = collected_contributions(model)
 
     if contributions != 0
         # Distribute contributions
@@ -83,7 +77,7 @@ function add_consumers(model, consumers::Integer)
 
     for n in 1:consumers
         # Turn the actor into a Loreco actor and add it to the model.
-        add_agent!(make_loreco(model, Actor(type = CONSUMER), needs), model)
+        add_agent!(make_loreco(model, Actor(types = CONSUMER), needs), model)
     end
 end
 
@@ -112,9 +106,7 @@ function add_bakers(model, bakers::Integer)
 
     for n in 1:bakers
         # Turn the actor into a Loreco actor.
-        baker = make_loreco(model, Actor(type = BAKER, producers = [Producer(bakery)]), needs)
-
-        add_model_behavior!(baker, produce_stock!)
+        baker = make_loreco(model, Actor(types = BAKER, producers = [Producer(bakery)]), needs)
 
         # Set the minimum stock of bread. This triggers production.
         min_stock!(baker.stock, bread, 35)
@@ -138,9 +130,7 @@ function add_tv_merchants(model, tv_merchants::Integer)
     tv_factory = ProducerBlueprint("TV factory", batch = Dict(tv => 1))
 
     for n in 1:tv_merchants
-        tv_merchant = make_loreco(model, Actor(type = TV_MERCHANT, producers = [Producer(tv_factory)]), needs)
-
-        add_model_behavior!(tv_merchant, produce_stock!)
+        tv_merchant = make_loreco(model, Actor(types = TV_MERCHANT, producers = [Producer(tv_factory)]), needs)
 
         min_stock!(tv_merchant.stock, tv, 10)
         add_agent!(tv_merchant, model)
@@ -157,7 +147,7 @@ function add_governance(model, citizens::Integer)
     governance = make_loreco(model, Actor(type = GOVERNANCE, producers = [Producer(container_park), Producer(swimming_pool)]))
 
     # The governance actor's balance does not receive guaranteed income nor does is it succeptable to demurrage. The balance of the governance actor is used as a money sink.
-    set_sumsy_active(governance.balance, false)
+    set_sumsy_active(governance, model, false)
     add_model_behavior!(governance, distribute_contributions!)
 
     min_stock!(governance.stock, container_ticket, citizens)
@@ -165,8 +155,6 @@ function add_governance(model, citizens::Integer)
     add_agent!(governance, model)
     model.properties[GOVERNANCE_ACTOR] = governance
 end
-
-EconoSim.sumsy_balance(actor::Actor) = sumsy_balance(actor.balance)
 
 function sumsy_price(model, bp::Blueprint)
     price(model)[SUMSY_DEP]
